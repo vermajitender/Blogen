@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %} Blogen - Blogs {% endblock %}
+
+{% block content %}
+<div style="min-height: 100%; margin-bottom: -80px; background: #ecf0f1;">
+  {% if request.user.is_authenticated %}
+    <nav class="navbar navbar-expand-sm navbar-light bg-light"> 
+      <div class="container">
+        <a class="navbar-brand" href="{% url 'blog:dashboard' %}"><strong>BLOGEN</strong></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+          
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link ml-3 active" href="{% url 'blog:dashboard' %}">
+                        DASHBOARD
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown mr-3">
+                    <a class="nav-link" href="{% url 'blog:dashboard' %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-user"></i> Welcome {{ request.user.username }}
+                    </a>
+                    <!-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">
+                            <i class="fa fa-user-circle"></i> Profile
+                        </a>
+                    </div> -->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blog:user_blogs' %}">
+                        <i class="fa fa-tablet"></i> SHOWCASE
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'blog:logout' %}">
+                        <i class="fa fa-sign-out-alt"></i> LOGOUT
+                    </a>
+                </li>
+            </ul>
+        </div>
+      </div>
+    </nav>
+    {% else %}
+    <nav class="navbar navbar-expand-sm navbar-light fixed-top" style="border-bottom: 1px solid gray;">
+          <div class="container">
+  <!--             <a href='{% url "blog:user_blogs" %}'> bloglist</a>
+   -->
+          <a class="navbar-brand" href="{% url 'blog:home' %}"><span class="logo"><strong>BLOGEN</strong></span></a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'blog:home' %}">HOME</a>
+              </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+              <!-- <li class="nav-item">
+                <a class="nav-link text-dark" href="#info1">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="#faq">FAQ's</a>
+              </li> -->
+              <li class="nav-item">
+                  <a class="nav-link text-dark" href="{% url 'blog:register' %}">REGISTER</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-dark" href="{% url 'blog:login' %}">LOGIN</a>
+              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'blog:user_blogs' %}">Blogs</a>
+              </li> -->
+            </ul>
+          </div>
+          </div>
+    </nav>
+    {% endif%}
+
+  <div class="py-5">
+	<div class="container">
+
+     <div class="card p-3 my-3 mt-5" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); border-left: 5px solid #1abc9c;">
+        <h3 id="viewhead" class="card-title px-4 pt-3" style="font-family: 'Noto Serif', serif; font-size: 50px;">{{ obj.title }}</h3>
+        <h5 class="px-4" style="font-family: 'Courgette', cursive; color: gray;">By {{ obj.user }} /updated: {{ obj.updated }} /created: {{obj.timestamp}}</h5>
+        <br>
+        <p id="viewbody" class="card-body px-4 pb-0" style="font-family: 'Roboto', sans-serif;">
+          <span class="px-2"></span>{{obj.content}}
+        </p>
+        <br>
+        <hr style="border: 1px solid black; width: 96%;">
+        <div class="px-4">
+          <h4>Comments</h4>
+          <a href="{% url 'blog:add_comment' obj.id %}">Add a comment.</a>
+          <hr>
+          {% for comment in obj.comment_set.all %}
+              <div class="row">
+                <div class="col-sm-0.5 px-3">
+                  <i class="fa fa-user"></i>
+                </div>
+                <div class="col-sm-11.5">  
+                  <p class=""><strong style="font-size: 18px;">{{ comment.user }}</strong><span class="px-3" style="color: gray;">{{ comment.created }}</span></p>    
+                  
+                  <p>{{ comment.body }}</p>
+                </div>
+              </div>
+            <hr>
+          {% endfor %}
+        </div>  
+     </div>
+	</div>
+ </div>
+ <div style="height: 80px"></div>
+</div> 
+<footer class="footer-basic-centered py-4" style="height: 80px">
+
+	<p class="footer-company-name">BLOGEN &copy; 2018</p>
+
+</footer>
+
+
+{% endblock %}
